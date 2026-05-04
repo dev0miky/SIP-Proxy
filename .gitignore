@@ -1,0 +1,17 @@
+CLAUDE.md
+
+.env
+.env.*
+!.env.example
+
+*.log
+*.pcap
+
+data/
+homer-data/
+mysql-data/
+postgres-data/
+
+.DS_Store
+.idea/
+.vscode/
