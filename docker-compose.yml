@@ -1,0 +1,7 @@
+name: sip-proxy
+
+networks:
+  sip:
+    driver: bridge
+
+services: {}
