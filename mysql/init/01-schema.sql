@@ -1,0 +1,53 @@
+CREATE DATABASE IF NOT EXISTS kamailio
+  DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+USE kamailio;
+
+CREATE TABLE version (
+  table_name VARCHAR(32) NOT NULL,
+  table_version INT UNSIGNED NOT NULL DEFAULT 0,
+  PRIMARY KEY (table_name)
+) ENGINE=InnoDB;
+
+INSERT INTO version (table_name, table_version) VALUES
+  ('subscriber', 7),
+  ('location', 1009);
+
+CREATE TABLE subscriber (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  username VARCHAR(64) NOT NULL DEFAULT '',
+  domain VARCHAR(64) NOT NULL DEFAULT '',
+  password VARCHAR(64) NOT NULL DEFAULT '',
+  ha1 VARCHAR(128) NOT NULL DEFAULT '',
+  ha1b VARCHAR(128) NOT NULL DEFAULT '',
+  PRIMARY KEY (id),
+  UNIQUE KEY account_idx (username, domain)
+) ENGINE=InnoDB;
+
+CREATE TABLE location (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  ruid VARCHAR(64) NOT NULL DEFAULT '',
+  username VARCHAR(64) NOT NULL DEFAULT '',
+  domain VARCHAR(64) DEFAULT NULL,
+  contact VARCHAR(512) NOT NULL DEFAULT '',
+  received VARCHAR(128) DEFAULT NULL,
+  path VARCHAR(512) DEFAULT NULL,
+  expires DATETIME NOT NULL DEFAULT '2030-05-28 21:32:15',
+  q FLOAT NOT NULL DEFAULT 1.0,
+  callid VARCHAR(255) NOT NULL DEFAULT 'Default-Call-ID',
+  cseq INT NOT NULL DEFAULT 1,
+  last_modified DATETIME NOT NULL DEFAULT '2000-01-01 00:00:01',
+  flags INT NOT NULL DEFAULT 0,
+  cflags INT NOT NULL DEFAULT 0,
+  user_agent VARCHAR(255) NOT NULL DEFAULT '',
+  socket VARCHAR(64) DEFAULT NULL,
+  methods INT DEFAULT NULL,
+  instance VARCHAR(255) DEFAULT NULL,
+  reg_id INT UNSIGNED NOT NULL DEFAULT 0,
+  server_id INT NOT NULL DEFAULT 0,
+  connection_id INT NOT NULL DEFAULT 0,
+  keepalive INT NOT NULL DEFAULT 0,
+  `partition` INT NOT NULL DEFAULT 0,
+  PRIMARY KEY (id),
+  UNIQUE KEY ruid_idx (ruid)
+) ENGINE=InnoDB;
