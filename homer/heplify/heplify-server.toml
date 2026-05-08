@@ -1,0 +1,14 @@
+HEPAddr = "0.0.0.0:9060"
+HEPTCPAddr = ""
+HEPTLSAddr = ""
+DBShema = "homer7"
+DBDriver = "postgres"
+DBAddr = "postgres:5432"
+DBUser = "homer"
+DBPass = "homer"
+DBDataTable = "homer_data"
+DBConfTable = "homer_config"
+DBBulk = 200
+DBTimer = 2
+Dedup = false
+LogLvl = "info"

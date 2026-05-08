@@ -23,5 +23,51 @@ services:
       timeout: 3s
       retries: 20
 
+  postgres:
+    image: postgres:15
+    container_name: sipproxy-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./homer/postgres-init:/docker-entrypoint-initdb.d:ro
+      - postgres-data:/var/lib/postgresql/data
+    networks: [sip]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  heplify-server:
+    image: sipcapture/heplify-server:latest
+    container_name: sipproxy-heplify
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./homer/heplify/heplify-server.toml:/etc/heplify-server.toml:ro
+    command: ["./heplify-server", "--config", "/etc/heplify-server.toml"]
+    networks: [sip]
+    ports:
+      - "9060:9060/udp"
+
+  homer-webapp:
+    image: sipcapture/webapp:latest
+    container_name: sipproxy-homer
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+      DB_USER: homer
+      DB_PASS: homer
+      DB_CONF_NAME: homer_config
+      DB_DATA_NAME: homer_data
+    ports:
+      - "9080:80"
+    networks: [sip]
+
 volumes:
   mysql-data:
+  postgres-data:
