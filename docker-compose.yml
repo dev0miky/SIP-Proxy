@@ -68,6 +68,21 @@ services:
       - "9080:80"
     networks: [sip]
 
+  freeswitch:
+    build: ./freeswitch
+    platform: linux/amd64
+    container_name: sipproxy-freeswitch
+    networks: [sip]
+    ports:
+      - "16384-16484:16384-16484/udp"
+    depends_on:
+      - heplify-server
+    healthcheck:
+      test: ["CMD", "fs_cli", "-x", "status"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
 volumes:
   mysql-data:
   postgres-data:

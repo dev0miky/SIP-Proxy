@@ -1,0 +1,10 @@
+<configuration name="sofia.conf" description="sofia Endpoint">
+  <global_settings>
+    <param name="log-level" value="0"/>
+    <param name="auto-restart" value="false"/>
+  </global_settings>
+  <profiles>
+    <X-PRE-PROCESS cmd="include" data="../sip_profiles/internal.xml"/>
+    <X-PRE-PROCESS cmd="include" data="../sip_profiles/external/*.xml"/>
+  </profiles>
+</configuration>

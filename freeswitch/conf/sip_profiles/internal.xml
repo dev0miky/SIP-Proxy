@@ -1,0 +1,16 @@
+<profile name="internal">
+  <settings>
+    <param name="sip-port" value="$${internal_sip_port}"/>
+    <param name="rtp-ip" value="$${external_rtp_ip}"/>
+    <param name="sip-ip" value="$${external_sip_ip}"/>
+    <param name="context" value="default"/>
+    <param name="dialplan" value="XML"/>
+    <param name="auth-calls" value="false"/>
+    <param name="apply-inbound-acl" value="any"/>
+    <param name="inbound-late-negotiation" value="true"/>
+    <param name="codec-prefs" value="OPUS,PCMU,PCMA"/>
+  </settings>
+  <aliases/>
+  <gateways/>
+  <domains/>
+</profile>
