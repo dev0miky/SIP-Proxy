@@ -83,6 +83,25 @@ services:
       timeout: 3s
       retries: 20
 
+  kamailio:
+    build: ./kamailio
+    container_name: sipproxy-kamailio
+    networks: [sip]
+    ports:
+      - "5060:5060/udp"
+      - "5060:5060/tcp"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      freeswitch:
+        condition: service_started
+      heplify-server:
+        condition: service_started
+    environment:
+      DB_URL: "mysql://kamailio:kamailio@mysql/kamailio"
+      FS_ADDR: "freeswitch:5080"
+      HEP_ADDR: "heplify-server:9060"
+
 volumes:
   mysql-data:
   postgres-data:
