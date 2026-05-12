@@ -6,19 +6,19 @@ networks:
 
 services:
   mysql:
-    image: mysql:8
+    image: mariadb:11
     container_name: sipproxy-mysql
     environment:
-      MYSQL_ROOT_PASSWORD: kamailio
-      MYSQL_DATABASE: kamailio
-      MYSQL_USER: kamailio
-      MYSQL_PASSWORD: kamailio
+      MARIADB_ROOT_PASSWORD: kamailio
+      MARIADB_DATABASE: kamailio
+      MARIADB_USER: kamailio
+      MARIADB_PASSWORD: kamailio
     volumes:
       - ./mysql/init:/docker-entrypoint-initdb.d:ro
       - mysql-data:/var/lib/mysql
     networks: [sip]
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-pkamailio"]
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "-pkamailio"]
       interval: 5s
       timeout: 3s
       retries: 20
