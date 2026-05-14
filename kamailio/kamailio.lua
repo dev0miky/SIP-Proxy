@@ -18,9 +18,13 @@ local function relay()
   end
 end
 
-local function route_internal_call(user)
-  KSR.pv.sets("$ru", "sip:" .. user .. "@" .. FS_ADDR)
+local function route_to_fs(target)
+  KSR.pv.sets("$ru", "sip:" .. target .. "@" .. FS_ADDR)
   relay()
+end
+
+local function looks_like_pstn(ruser)
+  return ruser ~= nil and ruser:match("^%+?%d%d%d%d%d%d%d%d+$") ~= nil
 end
 
 function ksr_request_route()
@@ -52,7 +56,11 @@ function ksr_request_route()
     end
     local ruser = KSR.pv.get("$rU")
     if ruser == "alice" or ruser == "bob" or ruser == "9196" then
-      route_internal_call(ruser)
+      route_to_fs(ruser)
+      return
+    end
+    if looks_like_pstn(ruser) then
+      route_to_fs(ruser)
       return
     end
     KSR.sl.sl_send_reply(404, "Not Found")
