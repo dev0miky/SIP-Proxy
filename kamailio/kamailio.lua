@@ -24,6 +24,8 @@ local function route_internal_call(user)
 end
 
 function ksr_request_route()
+  KSR.siptrace.sip_trace()
+
   if KSR.maxfwd.process_maxfwd(10) < 0 then
     KSR.sl.sl_send_reply(483, "Too Many Hops")
     return
@@ -58,4 +60,9 @@ function ksr_request_route()
   end
 
   KSR.sl.sl_send_reply(405, "Method Not Allowed")
+end
+
+function ksr_reply_route()
+  KSR.siptrace.sip_trace()
+  return 1
 end
