@@ -106,6 +106,7 @@ services:
       DB_URL: "mysql://kamailio:kamailio@mysql/kamailio"
       FS_ADDR: "freeswitch:5080"
       HEP_ADDR: "heplify-server:9060"
+      ITSP_PROXY: ${ITSP_PROXY:-}
 
 volumes:
   mysql-data:
