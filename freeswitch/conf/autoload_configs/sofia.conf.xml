@@ -6,6 +6,6 @@
   </global_settings>
   <profiles>
     <X-PRE-PROCESS cmd="include" data="../sip_profiles/internal.xml"/>
-    <X-PRE-PROCESS cmd="include" data="../sip_profiles/external/*.xml"/>
+    <X-PRE-PROCESS cmd="include" data="../sip_profiles/external.xml"/>
   </profiles>
 </configuration>

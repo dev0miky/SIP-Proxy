@@ -77,6 +77,11 @@ services:
       - "16384-16484:16384-16484/udp"
     depends_on:
       - heplify-server
+    environment:
+      ITSP_USER:  ${ITSP_USER:-}
+      ITSP_PASS:  ${ITSP_PASS:-}
+      ITSP_REALM: ${ITSP_REALM:-}
+      ITSP_PROXY: ${ITSP_PROXY:-}
     healthcheck:
       test: ["CMD", "fs_cli", "-x", "status"]
       interval: 5s

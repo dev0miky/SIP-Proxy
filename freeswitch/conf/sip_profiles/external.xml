@@ -1,0 +1,14 @@
+<profile name="external">
+  <settings>
+    <param name="sip-port" value="5081"/>
+    <param name="rtp-ip" value="$${external_rtp_ip}"/>
+    <param name="sip-ip" value="$${external_sip_ip}"/>
+    <param name="context" value="default"/>
+    <param name="dialplan" value="XML"/>
+    <param name="auth-calls" value="false"/>
+  </settings>
+  <gateways>
+    <X-PRE-PROCESS cmd="include" data="external/*.xml"/>
+  </gateways>
+  <domains/>
+</profile>
