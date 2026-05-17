@@ -1,5 +1,14 @@
 CLAUDE.md
 docs/superpowers/plans/
+.superpowers/
+
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+node_modules/
+dist/
+.venv/
 
 .env
 .env.*
