@@ -39,16 +39,17 @@ fi
 echo "ok: homer UI responding at http://localhost:9080/"
 
 echo "==> verifying panel-web + panel-api"
-if docker compose ps panel-web --quiet >/dev/null 2>&1 && [ -n "$(docker compose ps panel-web --quiet 2>/dev/null)" ]; then
-  if ! curl -fsS http://localhost:8080/ -o /dev/null; then
-    echo "FAIL: panel-web did not respond at http://localhost:8080/" >&2
+PORT="${PANEL_HTTP_PORT:-8080}"
+if [ -n "$(docker compose ps panel-web --quiet 2>/dev/null)" ]; then
+  if ! curl -fsS "http://localhost:${PORT}/" -o /dev/null; then
+    echo "FAIL: panel-web did not respond at http://localhost:${PORT}/" >&2
     exit 1
   fi
-  if ! curl -fsS http://localhost:8080/api/health/ping -o /dev/null; then
+  if ! curl -fsS "http://localhost:${PORT}/api/health/ping" -o /dev/null; then
     echo "FAIL: panel-api ping failed via panel-web proxy" >&2
     exit 1
   fi
-  echo "ok: panel responding at http://localhost:8080/"
+  echo "ok: panel responding at http://localhost:${PORT}/"
 else
   echo "skip: panel-web not running (run 'make panel-setup && make panel' to enable)"
 fi
