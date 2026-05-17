@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 
-from .routers import health
+from .routers import auth, health
 
 app = FastAPI(title="sip-proxy panel api")
-app.include_router(health.router)
+
+for r in (health, auth):
+    app.include_router(r.router)

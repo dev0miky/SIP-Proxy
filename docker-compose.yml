@@ -119,6 +119,7 @@ services:
       ADMIN_USER: ${ADMIN_USER:-admin}
       ADMIN_PASS_HASH: ${ADMIN_PASS_HASH:-}
       JWT_SECRET: ${JWT_SECRET:-}
+      PANEL_DEV: ${PANEL_DEV:-false}
       KAMAILIO_DB_URL: "mysql+pymysql://kamailio:kamailio@mysql/kamailio"
       HOMER_DB_URL: "postgresql+psycopg://homer:homer@postgres/homer_data"
       FS_CONTAINER: "sipproxy-freeswitch"
