@@ -21,6 +21,17 @@ make wait
 
 Then point a softphone (Zoiper, Linphone, MicroSIP) at `localhost:5060`. Register as `alice` or `bob`, password `1234`. Dial `9196` for the echo test extension. Open Homer at http://localhost:9080.
 
+## Web admin panel
+
+For a web UI (users, DID map, trunk creds, live calls, health), see [`panel/`](./panel/):
+
+```bash
+make panel-setup    # one-time: set admin password
+make up             # brings up the panel along with the rest of the stack
+```
+
+Open http://localhost:8080 (or set `PANEL_HTTP_PORT` in `.env`).
+
 ## Smoke test
 
 ```bash
