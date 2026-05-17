@@ -3,7 +3,7 @@ FROM ghcr.io/kamailio/kamailio-ci:5.8
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
-RUN mkdir -p /etc/kamailio/lua
+RUN mkdir -p /etc/kamailio/lua /var/run/kamailio
 COPY kamailio.lua /etc/kamailio/lua/kamailio.lua
 COPY users.lua /etc/kamailio/lua/users.lua
 COPY did_map.lua /etc/kamailio/lua/did_map.lua
