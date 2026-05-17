@@ -130,6 +130,14 @@ services:
       - .:/repo
       - /var/run/docker.sock:/var/run/docker.sock
 
+  panel-web:
+    build: ./panel/web
+    container_name: sipproxy-panel
+    depends_on: [panel-api]
+    networks: [sip]
+    ports:
+      - "${PANEL_HTTP_PORT:-8080}:80"
+
 volumes:
   mysql-data:
   postgres-data:

@@ -38,6 +38,21 @@ if ! curl -fsS http://localhost:9080/ -o /dev/null; then
 fi
 echo "ok: homer UI responding at http://localhost:9080/"
 
+echo "==> verifying panel-web + panel-api"
+if docker compose ps panel-web --quiet >/dev/null 2>&1 && [ -n "$(docker compose ps panel-web --quiet 2>/dev/null)" ]; then
+  if ! curl -fsS http://localhost:8080/ -o /dev/null; then
+    echo "FAIL: panel-web did not respond at http://localhost:8080/" >&2
+    exit 1
+  fi
+  if ! curl -fsS http://localhost:8080/api/health/ping -o /dev/null; then
+    echo "FAIL: panel-api ping failed via panel-web proxy" >&2
+    exit 1
+  fi
+  echo "ok: panel responding at http://localhost:8080/"
+else
+  echo "skip: panel-web not running (run 'make panel-setup && make panel' to enable)"
+fi
+
 echo
 echo "smoke ok — stack is healthy. for a real call test, point a softphone (Zoiper, Linphone) at"
 echo "localhost:5060 as alice / 1234, dial 9196 for the echo extension, and watch Homer for the flow."
