@@ -12,7 +12,7 @@ dependencies = [
   "psycopg[binary]==3.2.*",
   "docker==7.1.*",
   "python-multipart==0.0.20",
-  "pydantic-settings==2.6.*",
+  "pydantic-settings==2.14.*",
 ]
 
 [project.optional-dependencies]
