@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: 0 0% 100%;
+  --fg: 222 47% 11%;
+  --muted: 210 40% 96%;
+  --muted-fg: 215 16% 47%;
+  --accent: 217 91% 60%;
+  --border: 214 32% 91%;
+}
+
+.dark {
+  --bg: 222 47% 8%;
+  --fg: 210 40% 96%;
+  --muted: 217 33% 17%;
+  --muted-fg: 215 20% 65%;
+  --accent: 217 91% 60%;
+  --border: 215 28% 17%;
+}
+
+html, body, #root { height: 100%; }
+body { background: hsl(var(--bg)); color: hsl(var(--fg)); font-family: ui-sans-serif, system-ui, sans-serif; }
