@@ -1,4 +1,4 @@
-FROM ghcr.io/kamailio/kamailio-ci:5.8
+FROM ghcr.io/kamailio/kamailio-ci:6.1
 
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
