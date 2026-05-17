@@ -108,6 +108,27 @@ services:
       HEP_ADDR: "heplify-server:9060"
       ITSP_PROXY: ${ITSP_PROXY:-}
 
+  panel-api:
+    build: ./panel/api
+    container_name: sipproxy-panel-api
+    networks: [sip]
+    depends_on:
+      mysql: { condition: service_healthy }
+      postgres: { condition: service_healthy }
+    environment:
+      ADMIN_USER: ${ADMIN_USER:-admin}
+      ADMIN_PASS_HASH: ${ADMIN_PASS_HASH:-}
+      JWT_SECRET: ${JWT_SECRET:-}
+      KAMAILIO_DB_URL: "mysql+pymysql://kamailio:kamailio@mysql/kamailio"
+      HOMER_DB_URL: "postgresql+psycopg://homer:homer@postgres/homer_data"
+      FS_CONTAINER: "sipproxy-freeswitch"
+      KAMAILIO_CONTAINER: "sipproxy-kamailio"
+      ENV_FILE_PATH: "/repo/.env"
+      DID_MAP_PATH: "/repo/kamailio/did_map.lua"
+    volumes:
+      - .:/repo
+      - /var/run/docker.sock:/var/run/docker.sock
+
 volumes:
   mysql-data:
   postgres-data:
