@@ -22,14 +22,14 @@ if [ "${rows:-0}" -lt 2 ]; then
 fi
 echo "ok: subscriber table has $rows demo users"
 
-echo "==> verifying freeswitch profiles"
-profiles=$(docker compose exec -T freeswitch fs_cli -x 'sofia status' 2>&1 | grep -cE 'RUNNING' || true)
-if [ "${profiles:-0}" -lt 2 ]; then
-  echo "FAIL: expected >=2 sofia profiles RUNNING, got $profiles" >&2
-  docker compose exec -T freeswitch fs_cli -x 'sofia status' >&2
+echo "==> verifying asterisk pjsip transports"
+transports=$(docker compose exec -T asterisk asterisk -rx 'pjsip show transports' 2>&1 | grep -cE 'Transport:.*(udp|tcp)' || true)
+if [ "${transports:-0}" -lt 1 ]; then
+  echo "FAIL: expected >=1 pjsip transport up, got $transports" >&2
+  docker compose exec -T asterisk asterisk -rx 'pjsip show transports' >&2
   exit 1
 fi
-echo "ok: $profiles sofia profiles running (internal + external)"
+echo "ok: $transports asterisk pjsip transports running"
 
 echo "==> verifying homer web responds"
 if ! curl -fsS http://localhost:9080/ -o /dev/null; then

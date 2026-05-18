@@ -20,7 +20,7 @@ wait_for() {
 wait_for "mysql"      docker compose exec -T mysql mariadb-admin ping -pkamailio
 wait_for "postgres"   docker compose exec -T postgres pg_isready -U postgres
 wait_for "kamailio"   docker compose exec -T kamailio sh -c 'pidof kamailio'
-wait_for "freeswitch" docker compose exec -T freeswitch fs_cli -x status
+wait_for "asterisk"   docker compose exec -T asterisk asterisk -rx 'core show settings'
 wait_for "homer"      curl -fsS http://localhost:9080/
 
 echo "all services healthy"
