@@ -2,7 +2,7 @@ package.path = "/etc/kamailio/lua/?.lua;" .. package.path
 local users = require("users")
 local did_map = require("did_map")
 
-local FS_ADDR = os.getenv("FS_ADDR") or "freeswitch:5080"
+local MEDIA_ADDR = os.getenv("MEDIA_ADDR") or "asterisk:5060"
 local ITSP_HOST = (os.getenv("ITSP_PROXY") or ""):gsub(":%d+$", "")
 
 local function loose_route()
@@ -20,8 +20,8 @@ local function relay()
   end
 end
 
-local function route_to_fs(target)
-  KSR.pv.sets("$ru", "sip:" .. target .. "@" .. FS_ADDR)
+local function route_to_media(target)
+  KSR.pv.sets("$ru", "sip:" .. target .. "@" .. MEDIA_ADDR)
   relay()
 end
 
@@ -85,11 +85,11 @@ function ksr_request_route()
   if KSR.is_INVITE() or KSR.is_ACK() or KSR.is_BYE() or KSR.is_CANCEL() then
     local ruser = KSR.pv.get("$rU")
     if ruser == "9196" then
-      route_to_fs(ruser)
+      route_to_media(ruser)
       return
     end
     if looks_like_pstn(ruser) then
-      route_to_fs(ruser)
+      route_to_media(ruser)
       return
     end
     if KSR.registrar.lookup("location") > 0 then

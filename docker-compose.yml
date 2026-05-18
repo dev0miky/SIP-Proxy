@@ -93,7 +93,7 @@ services:
         condition: service_started
     environment:
       DB_URL: "mysql://kamailio:kamailio@mysql/kamailio"
-      FS_ADDR: "asterisk:5060"
+      MEDIA_ADDR: "asterisk:5060"
       HEP_ADDR: "heplify-server:9060"
       ITSP_PROXY: ${ITSP_PROXY:-}
     volumes:
