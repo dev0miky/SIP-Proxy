@@ -26,8 +26,8 @@ def write_trunk(body: TrunkBody):
     prev = trunk_env.read()
     trunk_env.write(body.model_dump())
     try:
-        restart(settings.fs_container, timeout=30)
+        restart(settings.media_container, timeout=30)
     except Exception as e:
         trunk_env.write(prev)
-        raise HTTPException(status_code=500, detail=f"freeswitch restart failed: {e}")
+        raise HTTPException(status_code=500, detail=f"media container restart failed: {e}")
     return {"ok": True}

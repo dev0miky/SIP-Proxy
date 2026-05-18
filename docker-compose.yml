@@ -146,7 +146,7 @@ services:
       PANEL_DEV: "${PANEL_DEV:-false}"
       KAMAILIO_DB_URL: "mysql+pymysql://kamailio:kamailio@mysql/kamailio"
       HOMER_DB_URL: "postgresql+psycopg://homer:homer@postgres/homer_data"
-      FS_CONTAINER: "sipproxy-asterisk"
+      MEDIA_CONTAINER: "sipproxy-asterisk"
       KAMAILIO_CONTAINER: "sipproxy-kamailio"
       ENV_FILE_PATH: "/repo/.env"
       DID_MAP_PATH: "/repo/kamailio/did_map.lua"

@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     jwt_secret_file: str = "/run/secrets/jwt_secret"
     kamailio_db_url: str = "mysql+pymysql://kamailio:kamailio@mysql/kamailio"
     homer_db_url: str = "postgresql+psycopg://homer:homer@postgres/homer_data"
-    fs_container: str = "sipproxy-freeswitch"
+    media_container: str = "sipproxy-asterisk"
     kamailio_container: str = "sipproxy-kamailio"
     env_file_path: str = "/repo/.env"
     did_map_path: str = "/repo/kamailio/did_map.lua"

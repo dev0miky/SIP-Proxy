@@ -65,7 +65,7 @@ function ksr_request_route()
   if loose_route() then return end
 
   if KSR.is_REGISTER() then
-    if not users.authenticate() then return end
+    if not users.www_authenticate() then return end
     if KSR.registrar.save("location", 0) < 0 then
       KSR.sl.sl_send_reply(500, "Registrar Error")
     end
@@ -78,16 +78,17 @@ function ksr_request_route()
   end
 
   if KSR.is_INVITE() or KSR.is_ACK() or KSR.is_BYE() or KSR.is_CANCEL() then
-    if KSR.is_INVITE() then
-      if not users.authenticate() then return end
-    end
     local ruser = KSR.pv.get("$rU")
-    if ruser == "alice" or ruser == "bob" or ruser == "9196" then
+    if ruser == "9196" then
       route_to_fs(ruser)
       return
     end
     if looks_like_pstn(ruser) then
       route_to_fs(ruser)
+      return
+    end
+    if KSR.registrar.lookup("location") > 0 then
+      relay()
       return
     end
     KSR.sl.sl_send_reply(404, "Not Found")
