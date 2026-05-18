@@ -1,13 +1,18 @@
 import { api } from "./client";
 
 export type Channel = {
-  uuid: string;
-  cid_name?: string;
-  cid_num?: string;
-  dest?: string;
-  created?: string;
+  channel: string;
+  context?: string;
+  exten?: string;
+  callerid_num?: string;
+  callerid_name?: string;
+  account?: string;
+  state?: string;
   application?: string;
+  duration?: string;
+  bridgeid?: string;
 };
 
 export const list = () => api<Channel[]>("/api/calls");
-export const hangup = (uuid: string) => api<void>(`/api/calls/${uuid}`, { method: "DELETE" });
+export const hangup = (channel: string) =>
+  api<void>(`/api/calls/${encodeURIComponent(channel)}`, { method: "DELETE" });
