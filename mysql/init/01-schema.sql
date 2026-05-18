@@ -11,7 +11,7 @@ CREATE TABLE version (
 
 INSERT INTO version (table_name, table_version) VALUES
   ('subscriber', 7),
-  ('location', 1009);
+  ('location', 9);
 
 CREATE TABLE subscriber (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
