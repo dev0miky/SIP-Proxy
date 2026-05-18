@@ -1,14 +1,14 @@
 # sip-proxy
 
-A small SIP proxy / SBC example. Kamailio in front, FreeSWITCH behind, Homer for tracing. Everything runs with `docker compose up`.
+A small SIP proxy / SBC example. Kamailio in front, Asterisk behind, Homer for tracing. Everything runs with `docker compose up`.
 
 ## What it does
 
 - Internal SIP clients register to Kamailio with simple demo credentials.
-- Kamailio routes calls. Internal extensions get bridged through FreeSWITCH; numeric (PSTN-shaped) numbers get handed to FreeSWITCH's `itsp` gateway.
-- FreeSWITCH bridges the audio. Its `itsp` gateway holds the real upstream credentials so internal clients never see them.
+- Kamailio routes calls. User-to-user calls are resolved via the usrloc registrar (no media anchoring). Numeric (PSTN-shaped) numbers and the `9196` echo get handed to Asterisk.
+- Asterisk holds the upstream ITSP credentials and bridges outbound calls through its `trunk` pjsip endpoint.
 - DID-to-user mapping for inbound calls lives in a small Lua table (`kamailio/did_map.lua`).
-- Every SIP message from Kamailio and FreeSWITCH is mirrored to Homer over HEP. Open `http://localhost:9080` to see ladder diagrams of every call.
+- Every SIP message from Kamailio and Asterisk is mirrored to Homer over HEP. Open `http://localhost:9080` to see ladder diagrams of every call.
 
 ## Run it
 
@@ -25,7 +25,7 @@ Point a softphone (Zoiper, Linphone, MicroSIP) at `localhost:5060`. Register as 
 
 **Production on a VPS** — softphones over the public internet:
 
-See [`docs/deploy.md`](./docs/deploy.md) for the full walkthrough (DNS, firewall, Caddy with auto-TLS for the panel, fail2ban, pike rate limiting, NAT-aware FreeSWITCH).
+See [`docs/deploy.md`](./docs/deploy.md) for the full walkthrough (DNS, firewall, Caddy with auto-TLS for the panel, fail2ban, pike rate limiting, NAT-aware Asterisk).
 
 Short version:
 
@@ -53,7 +53,7 @@ Open http://localhost:8080 (or set `PANEL_HTTP_PORT` in `.env`).
 make smoke
 ```
 
-Health-checks every container, verifies the schema is seeded, and confirms both FreeSWITCH sofia profiles are running and Homer is responding.
+Health-checks every container, verifies the schema is seeded, and confirms Asterisk pjsip transports are up + Homer is responding.
 
 ## Layout
 
@@ -69,12 +69,14 @@ sip-proxy/
 │   ├── users.lua              auth helper
 │   ├── did_map.lua            DID -> internal user
 │   └── entrypoint.sh
-├── freeswitch/
-│   ├── Dockerfile
-│   ├── entrypoint.sh          sed-substitutes ITSP_* into itsp.xml at boot
-│   ├── conf/...               sofia profiles, dialplan
+├── asterisk/
+│   ├── Dockerfile             andrius/asterisk:18-current + our config
+│   ├── entrypoint.sh          renders pjsip.conf.tmpl from .env at boot
+│   ├── conf/pjsip.conf.tmpl   transports + kamailio endpoint + trunk endpoint
+│   └── conf/extensions.conf   9196 echo + outbound-to-trunk dialplan
 ├── mysql/init/                Kamailio schema + demo users (alice/bob, both pwd 1234)
 ├── homer/                     postgres init + heplify config
+├── panel/                     React + FastAPI admin panel
 └── test/
     ├── wait.sh                polls each service for readiness
     └── smoke.sh               end-to-end health smoke
@@ -90,8 +92,8 @@ For prod (`make prod-up`), the repo ships with:
 - `fail2ban` container — bans IPs after 5 auth failures in 10 min for 1 hour
 - Caddy with auto-TLS for the panel — Let's Encrypt cert, HTTPS-only
 - `panel-setup` enforces ≥12-char admin password, stored as bcrypt in a docker secret file
-- NAT-aware FreeSWITCH via `EXTERNAL_IP`
-- Open firewall ports limited to 80, 443, 5060, 16384–16484
+- NAT-aware Asterisk via `EXTERNAL_IP`
+- Open firewall ports limited to 80, 443, 5060, 10000–10100
 
 Still **not** in v1, see "future work" in `docs/design.md`:
 
@@ -102,20 +104,20 @@ Still **not** in v1, see "future work" in `docs/design.md`:
 
 ## How the credential hiding works
 
-Internal SIP clients authenticate against Kamailio's `subscriber` table (their creds live only in MariaDB). When they dial out, Kamailio routes the INVITE to FreeSWITCH; FreeSWITCH's `itsp` gateway proxies the call upstream and authenticates with the trunk credentials that live only in `.env`. The upstream provider never sees the internal user's identity, and internal users never see the trunk credentials.
+Internal SIP clients authenticate against Kamailio's `subscriber` table (their creds live only in MariaDB). When they dial a PSTN number, Kamailio routes the INVITE to Asterisk; Asterisk's `trunk` pjsip endpoint authenticates upstream using the credentials that live only in `.env`. The upstream provider never sees the internal user's identity, and internal users never see the trunk credentials.
 
-For inbound, the upstream sends a call addressed to the trunk identity; Kamailio whitelists the upstream's IP, looks up the dialed DID in `did_map.lua`, and bridges to the matching internal user via FreeSWITCH.
+For inbound, the upstream sends a call addressed to the trunk identity. Kamailio whitelists the upstream's IP, looks up the dialed DID in `did_map.lua`, resolves the matching internal user via the registrar, and forwards the INVITE to their registered contact.
 
 ## Tracing
 
-Both Kamailio and FreeSWITCH ship every SIP message to `heplify-server` over HEP v3. heplify writes to PostgreSQL and Homer renders them in the web UI at http://localhost:9080. Default Homer login: `admin / sipcapture`.
+Both Kamailio (via `siptrace` module) and Asterisk (via `res_hep`) ship every SIP message to `heplify-server` over HEP v3. heplify writes to PostgreSQL and Homer renders them in the web UI at http://localhost:9080. Default Homer login: `admin / sipcapture`.
 
 ## Stack
 
 | Piece | Purpose |
 |---|---|
-| Kamailio 5.8 (KEMI Lua) | SIP proxy / SBC |
-| FreeSWITCH 1.10 | Media anchor + IVR + outbound gateway |
+| Kamailio 5.8 (KEMI Lua) | SIP proxy / SBC + registrar |
+| Asterisk 18 (pjsip) | Media + echo + outbound trunk |
 | MariaDB 11 | Kamailio `subscriber` + `location` tables |
 | heplify-server | HEP capture collector |
 | PostgreSQL 15 | Homer storage |

@@ -31,7 +31,7 @@ ufw allow 80/tcp       # Caddy HTTP (Let's Encrypt challenges)
 ufw allow 443/tcp      # Caddy HTTPS (panel)
 ufw allow 5060/udp     # SIP
 ufw allow 5060/tcp     # SIP TCP
-ufw allow 16384:16484/udp   # RTP
+ufw allow 10000:10100/udp   # RTP
 ufw enable
 ```
 
@@ -124,7 +124,7 @@ make prod-up    # rebuilds + restarts only changed services
 
 Rotating the admin password: re-run `make panel-setup`, then `docker compose up -d --force-recreate panel-api`.
 
-Rotating ITSP creds via panel: edit in **Trunk** form, click save. Panel restarts FreeSWITCH only (~6s downtime).
+Rotating ITSP creds via panel: edit in **Trunk** form, click save. Panel restarts Asterisk only (~6s downtime).
 
 ## 11. Hardening checklist before opening to real users
 
@@ -142,7 +142,7 @@ Rotating ITSP creds via panel: edit in **Trunk** form, click save. Panel restart
 
 ## 12. Things that will go wrong
 
-- **Calls connect but no audio.** Almost always `EXTERNAL_IP`. Set it to the VPS public IP, restart FreeSWITCH (`docker compose restart freeswitch`).
+- **Calls connect but no audio.** Almost always `EXTERNAL_IP`. Set it to the VPS public IP, restart Asterisk (`docker compose restart asterisk`).
 - **Cert never issues.** Caddy can't reach Let's Encrypt because port 80 isn't open, or DNS isn't pointing yet. `docker compose --profile prod logs caddy`.
 - **fail2ban bans you.** Whitelist your own IP in `fail2ban/data/jail.d/kamailio-auth.conf` with `ignoreip = your.ip.here`.
 - **Upstream auth fails.** Wrong creds in `.env`, or the provider needs IP-auth + you haven't added the VPS IP to their allowlist.

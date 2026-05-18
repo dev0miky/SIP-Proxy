@@ -16,7 +16,7 @@ Open http://localhost:8080 (or whatever you set `PANEL_HTTP_PORT` to). Default u
 - **Users** — CRUD on SIP subscribers (MariaDB)
 - **Registrations** — live view of who's registered (polled every 5s)
 - **DID map** — add / edit / remove DID → user mappings; reloads Kamailio via `kamcmd app_lua.reload`
-- **Trunk** — edit upstream ITSP credentials in `.env`; restarts FreeSWITCH on save
+- **Trunk** — edit upstream ITSP credentials in `.env`; restarts Asterisk on save
 - **Active calls** — live channel list with hangup
 - **Call history** — last 24h pulled from Homer
 - **Health** — container status + log tail
