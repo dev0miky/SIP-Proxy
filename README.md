@@ -12,6 +12,8 @@ A small SIP proxy / SBC example. Kamailio in front, FreeSWITCH behind, Homer for
 
 ## Run it
 
+**Local dev** — softphones on the same machine or LAN:
+
 ```bash
 cp .env.example .env
 # edit .env if you want a real ITSP trunk
@@ -19,7 +21,20 @@ make up
 make wait
 ```
 
-Then point a softphone (Zoiper, Linphone, MicroSIP) at `localhost:5060`. Register as `alice` or `bob`, password `1234`. Dial `9196` for the echo test extension. Open Homer at http://localhost:9080.
+Point a softphone (Zoiper, Linphone, MicroSIP) at `localhost:5060`. Register as `alice` or `bob`, password `1234`. Dial `9196` for the echo test. Open Homer at http://localhost:9080.
+
+**Production on a VPS** — softphones over the public internet:
+
+See [`docs/deploy.md`](./docs/deploy.md) for the full walkthrough (DNS, firewall, Caddy with auto-TLS for the panel, fail2ban, pike rate limiting, NAT-aware FreeSWITCH).
+
+Short version:
+
+```bash
+cp .env.prod.example .env
+# edit .env with your VPS public IP, panel hostname, ITSP creds
+make panel-setup        # interactive admin password (12+ chars)
+make prod-up            # COMPOSE_PROFILES=prod, brings up caddy + fail2ban too
+```
 
 ## Web admin panel
 
@@ -67,12 +82,23 @@ sip-proxy/
 
 ## Security
 
-This is an example. Demo passwords are `1234`, ITSP credentials live in `.env`. Do not expose port 5060 to the public internet without further hardening:
+For dev (`make up`), demo passwords are `1234` and the panel binds to `localhost:8080`. Don't expose this to the internet.
 
-- Real passwords, not `1234`.
-- Rate-limiting and fail2ban in front of Kamailio.
-- TLS for SIP, SRTP for media.
-- Trim the FreeSWITCH dialplan to a closed set of destinations.
+For prod (`make prod-up`), the repo ships with:
+
+- Kamailio `pike` module — drops bursts above 16 req/2s per source IP
+- `fail2ban` container — bans IPs after 5 auth failures in 10 min for 1 hour
+- Caddy with auto-TLS for the panel — Let's Encrypt cert, HTTPS-only
+- `panel-setup` enforces ≥12-char admin password, stored as bcrypt in a docker secret file
+- NAT-aware FreeSWITCH via `EXTERNAL_IP`
+- Open firewall ports limited to 80, 443, 5060, 16384–16484
+
+Still **not** in v1, see "future work" in `docs/design.md`:
+
+- TLS for SIP itself (port 5061)
+- SRTP for media
+- Audit log of admin actions
+- Allowlist proxy in front of the docker socket
 
 ## How the credential hiding works
 
