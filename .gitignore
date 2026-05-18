@@ -17,7 +17,7 @@ dist/
 *.log
 *.pcap
 
-data/
+/data/
 homer-data/
 mysql-data/
 postgres-data/

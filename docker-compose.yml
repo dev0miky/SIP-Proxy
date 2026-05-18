@@ -104,6 +104,24 @@ services:
       FS_ADDR: "freeswitch:5080"
       HEP_ADDR: "heplify-server:9060"
       ITSP_PROXY: ${ITSP_PROXY:-}
+    volumes:
+      - kamailio-logs:/var/log/kamailio
+
+  fail2ban:
+    profiles: ["prod"]
+    image: crazymax/fail2ban:latest
+    container_name: sipproxy-fail2ban
+    network_mode: host
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    environment:
+      TZ: UTC
+      F2B_LOG_LEVEL: INFO
+    volumes:
+      - kamailio-logs:/var/log/kamailio:ro
+      - ./fail2ban/data:/data
 
   panel-api:
     build: ./panel/api
@@ -138,3 +156,4 @@ services:
 volumes:
   mysql-data:
   postgres-data:
+  kamailio-logs:
