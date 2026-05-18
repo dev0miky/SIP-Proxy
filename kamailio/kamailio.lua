@@ -41,7 +41,12 @@ local function route_inbound()
     KSR.sl.sl_send_reply(404, "Unknown DID")
     return
   end
-  route_to_fs(target)
+  KSR.pv.sets("$rU", target)
+  if KSR.registrar.lookup("location") > 0 then
+    relay()
+  else
+    KSR.sl.sl_send_reply(480, "User Not Registered")
+  end
 end
 
 function ksr_request_route()
