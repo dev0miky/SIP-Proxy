@@ -123,6 +123,25 @@ services:
       - kamailio-logs:/var/log/kamailio:ro
       - ./fail2ban/data:/data
 
+  caddy:
+    profiles: ["prod"]
+    image: caddy:2
+    container_name: sipproxy-caddy
+    networks: [sip]
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      PANEL_HOSTNAME: ${PANEL_HOSTNAME:-panel.example.com}
+      ACME_EMAIL: ${ACME_EMAIL:-}
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - panel-web
+
   panel-api:
     build: ./panel/api
     container_name: sipproxy-panel-api
@@ -157,3 +176,5 @@ volumes:
   mysql-data:
   postgres-data:
   kamailio-logs:
+  caddy-data:
+  caddy-config:
