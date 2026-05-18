@@ -47,6 +47,11 @@ end
 function ksr_request_route()
   KSR.siptrace.sip_trace()
 
+  if KSR.pike.pike_check_req() < 0 then
+    KSR.sl.sl_send_reply(429, "Too Many Requests")
+    return
+  end
+
   if KSR.maxfwd.process_maxfwd(10) < 0 then
     KSR.sl.sl_send_reply(483, "Too Many Hops")
     return
