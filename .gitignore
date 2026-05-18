@@ -13,6 +13,7 @@ dist/
 .env
 .env.*
 !.env.example
+!.env.prod.example
 panel/admin.hash
 panel/jwt.secret
 

@@ -1,7 +1,7 @@
 SHELL := /usr/bin/env bash
 COMPOSE := docker compose
 
-.PHONY: up down restart wait test smoke logs ps clean nuke panel-setup panel panel-down panel-logs
+.PHONY: up down restart wait test smoke logs ps clean nuke panel-setup panel panel-down panel-logs prod-up prod-down
 
 up:
 	$(COMPOSE) up -d
@@ -33,6 +33,12 @@ nuke: clean
 
 panel-setup:
 	./scripts/panel-setup.sh
+
+prod-up:
+	COMPOSE_PROFILES=prod $(COMPOSE) up -d --build
+
+prod-down:
+	COMPOSE_PROFILES=prod $(COMPOSE) down
 
 panel:
 	$(COMPOSE) up -d panel-api panel-web
