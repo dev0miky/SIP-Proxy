@@ -150,10 +150,8 @@ services:
       mysql: { condition: service_healthy }
       postgres: { condition: service_healthy }
     environment:
-      ADMIN_USER: ${ADMIN_USER:-admin}
-      ADMIN_PASS_HASH: ${ADMIN_PASS_HASH:-}
-      JWT_SECRET: ${JWT_SECRET:-}
-      PANEL_DEV: ${PANEL_DEV:-false}
+      ADMIN_USER: "${ADMIN_USER:-admin}"
+      PANEL_DEV: "${PANEL_DEV:-false}"
       KAMAILIO_DB_URL: "mysql+pymysql://kamailio:kamailio@mysql/kamailio"
       HOMER_DB_URL: "postgresql+psycopg://homer:homer@postgres/homer_data"
       FS_CONTAINER: "sipproxy-freeswitch"
@@ -163,6 +161,9 @@ services:
     volumes:
       - .:/repo
       - /var/run/docker.sock:/var/run/docker.sock
+    secrets:
+      - admin_hash
+      - jwt_secret
 
   panel-web:
     build: ./panel/web
@@ -178,3 +179,9 @@ volumes:
   kamailio-logs:
   caddy-data:
   caddy-config:
+
+secrets:
+  admin_hash:
+    file: ./panel/admin.hash
+  jwt_secret:
+    file: ./panel/jwt.secret

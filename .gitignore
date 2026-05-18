@@ -13,6 +13,8 @@ dist/
 .env
 .env.*
 !.env.example
+panel/admin.hash
+panel/jwt.secret
 
 *.log
 *.pcap
