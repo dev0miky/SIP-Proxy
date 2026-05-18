@@ -68,22 +68,14 @@ services:
       - "9080:80"
     networks: [sip]
 
-  freeswitch:
-    build: ./freeswitch
-    platform: linux/amd64
-    container_name: sipproxy-freeswitch
+  asterisk:
+    build: ./asterisk
+    container_name: sipproxy-asterisk
     networks: [sip]
     ports:
-      - "16384-16484:16384-16484/udp"
+      - "10000-10100:10000-10100/udp"
     depends_on:
       - heplify-server
-    volumes:
-      - ./.env:/etc/freeswitch/.env:ro
-    healthcheck:
-      test: ["CMD", "fs_cli", "-x", "status"]
-      interval: 5s
-      timeout: 3s
-      retries: 20
 
   kamailio:
     build: ./kamailio
@@ -95,13 +87,13 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
-      freeswitch:
+      asterisk:
         condition: service_started
       heplify-server:
         condition: service_started
     environment:
       DB_URL: "mysql://kamailio:kamailio@mysql/kamailio"
-      FS_ADDR: "freeswitch:5080"
+      FS_ADDR: "asterisk:5060"
       HEP_ADDR: "heplify-server:9060"
       ITSP_PROXY: ${ITSP_PROXY:-}
     volumes:
@@ -154,7 +146,7 @@ services:
       PANEL_DEV: "${PANEL_DEV:-false}"
       KAMAILIO_DB_URL: "mysql+pymysql://kamailio:kamailio@mysql/kamailio"
       HOMER_DB_URL: "postgresql+psycopg://homer:homer@postgres/homer_data"
-      FS_CONTAINER: "sipproxy-freeswitch"
+      FS_CONTAINER: "sipproxy-asterisk"
       KAMAILIO_CONTAINER: "sipproxy-kamailio"
       ENV_FILE_PATH: "/repo/.env"
       DID_MAP_PATH: "/repo/kamailio/did_map.lua"
