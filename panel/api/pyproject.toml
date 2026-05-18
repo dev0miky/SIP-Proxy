@@ -19,7 +19,7 @@ dependencies = [
 test = [
   "pytest==8.3.*",
   "httpx==0.28.*",
-  "testcontainers[mariadb,postgres]==4.8.*",
+  "testcontainers[mariadb,postgres]==4.14.*",
 ]
 
 [tool.setuptools.packages.find]
