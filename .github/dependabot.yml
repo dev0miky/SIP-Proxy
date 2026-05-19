@@ -39,6 +39,9 @@ updates:
     directory: "/kamailio"
     schedule:
       interval: "monthly"
+    ignore:
+      - dependency-name: "ghcr.io/kamailio/kamailio-ci"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: "docker"
     directory: "/asterisk"

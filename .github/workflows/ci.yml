@@ -10,7 +10,7 @@ jobs:
   compose-config:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: validate docker-compose.yml
         run: docker compose -f docker-compose.yml config -q
       - name: validate prod profile
@@ -19,10 +19,10 @@ jobs:
   backend-tests:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
-          python-version: "3.12"
+          python-version: "3.14"
       - name: install panel-api deps
         working-directory: panel/api
         run: pip install -e ".[test]"
@@ -33,10 +33,10 @@ jobs:
   frontend-build:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: "20"
+          node-version: "26"
       - name: install + build
         working-directory: panel/web
         run: |
