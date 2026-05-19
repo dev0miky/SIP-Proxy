@@ -7,12 +7,8 @@ A small SIP proxy / SBC example. Kamailio in front, Asterisk behind, Homer for t
 
 ## Screenshots
 
-> Run the stack locally and snap these into `docs/img/`. The panel auto-skins to your light/dark preference.
-
-| | |
-|---|---|
-| ![Users](./docs/img/users.png) | ![Registrations](./docs/img/registrations.png) |
-| ![DID map](./docs/img/did-map.png) | ![Call history](./docs/img/history.png) |
+![Users page](./docs/img/users.png)
+*Admin panel — users tab*
 
 ## What it does
 
