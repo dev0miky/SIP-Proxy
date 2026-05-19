@@ -2,6 +2,9 @@
 
 [![ci](https://github.com/dev0miky/SIP-Proxy/actions/workflows/ci.yml/badge.svg)](https://github.com/dev0miky/SIP-Proxy/actions/workflows/ci.yml)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+[![release](https://img.shields.io/github/v/release/dev0miky/SIP-Proxy)](https://github.com/dev0miky/SIP-Proxy/releases)
+[![stars](https://img.shields.io/github/stars/dev0miky/SIP-Proxy?style=flat)](https://github.com/dev0miky/SIP-Proxy/stargazers)
+[![last commit](https://img.shields.io/github/last-commit/dev0miky/SIP-Proxy)](https://github.com/dev0miky/SIP-Proxy/commits/main)
 
 A small SIP proxy / SBC example. Kamailio in front, Asterisk behind, Homer for tracing. Everything runs with `docker compose up`.
 
