@@ -36,7 +36,12 @@ export default function HistoryPage() {
               <td>{r.to_user ?? "—"}</td>
               <td>{r.message_count}</td>
               <td className="text-right">
-                <a className="text-accent text-xs" href={r.homer_url} target="_blank" rel="noreferrer">
+                <a
+                  className="text-accent text-xs"
+                  href={`http://${window.location.hostname}:9080/search/result/data?callid=${encodeURIComponent(r.callid)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   homer ↗
                 </a>
               </td>
