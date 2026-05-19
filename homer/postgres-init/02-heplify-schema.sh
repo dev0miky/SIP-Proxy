@@ -6,6 +6,11 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname homer_data <<-EOSQL
   ALTER SCHEMA public OWNER TO homer;
 EOSQL
 
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname homer_config <<-EOSQL
+  GRANT ALL ON SCHEMA public TO homer;
+  ALTER SCHEMA public OWNER TO homer;
+EOSQL
+
 psql -v ON_ERROR_STOP=1 --username homer --dbname homer_data <<-EOSQL
   CREATE TABLE IF NOT EXISTS hep_proto_1_default (
     id BIGSERIAL,

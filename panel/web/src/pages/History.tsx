@@ -36,14 +36,16 @@ export default function HistoryPage() {
               <td>{r.to_user ?? "—"}</td>
               <td>{r.message_count}</td>
               <td className="text-right">
-                <a
+                <button
                   className="text-accent text-xs"
-                  href={`http://${window.location.hostname}:9080/search/result/data?callid=${encodeURIComponent(r.callid)}`}
-                  target="_blank"
-                  rel="noreferrer"
+                  onClick={async () => {
+                    await navigator.clipboard.writeText(r.callid).catch(() => {});
+                    window.open(`http://${window.location.hostname}:9080/`, "_blank", "noopener");
+                  }}
+                  title={`Open Homer + copy callid ${r.callid} to clipboard`}
                 >
                   homer ↗
-                </a>
+                </button>
               </td>
             </tr>
           ))}
