@@ -37,12 +37,15 @@ export default function HistoryPage() {
               <td>{r.message_count}</td>
               <td className="text-right">
                 <button
-                  className="text-accent text-xs"
-                  onClick={async () => {
-                    await navigator.clipboard.writeText(r.callid).catch(() => {});
+                  type="button"
+                  className="text-accent text-xs underline cursor-pointer"
+                  onClick={() => {
                     window.open(`http://${window.location.hostname}:9080/`, "_blank", "noopener");
+                    if (navigator.clipboard && window.isSecureContext) {
+                      navigator.clipboard.writeText(r.callid).catch(() => {});
+                    }
                   }}
-                  title={`Open Homer + copy callid ${r.callid} to clipboard`}
+                  title={`Open Homer (callid: ${r.callid})`}
                 >
                   homer ↗
                 </button>
