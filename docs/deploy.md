@@ -37,6 +37,8 @@ ufw enable
 
 What you're **not** opening: 8080 (panel-web direct), 8000 (panel-api), 3306, 5432, 9080 (Homer). Those stay internal — only Caddy is the front door.
 
+**If you're skipping Caddy** (testing HTTP only, no domain yet), also open: `ufw allow 8080/tcp` (panel) and `ufw allow 9080/tcp` (Homer UI). The "homer ↗" link on the panel's Call History page goes to `http://<your-ip>:9080/...`, so port 9080 must be reachable from the browser.
+
 ## 4. Install Docker + clone
 
 ```bash
