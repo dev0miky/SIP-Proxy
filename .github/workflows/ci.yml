@@ -1,0 +1,44 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  compose-config:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: validate docker-compose.yml
+        run: docker compose -f docker-compose.yml config -q
+      - name: validate prod profile
+        run: COMPOSE_PROFILES=prod docker compose -f docker-compose.yml config -q
+
+  backend-tests:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: install panel-api deps
+        working-directory: panel/api
+        run: pip install -e ".[test]"
+      - name: pytest
+        working-directory: panel/api
+        run: pytest -q
+
+  frontend-build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: install + build
+        working-directory: panel/web
+        run: |
+          npm install
+          npm run build

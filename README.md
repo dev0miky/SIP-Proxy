@@ -1,6 +1,18 @@
 # sip-proxy
 
+[![ci](https://github.com/dev0miky/SIP-Proxy/actions/workflows/ci.yml/badge.svg)](https://github.com/dev0miky/SIP-Proxy/actions/workflows/ci.yml)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+
 A small SIP proxy / SBC example. Kamailio in front, Asterisk behind, Homer for tracing. Everything runs with `docker compose up`.
+
+## Screenshots
+
+> Run the stack locally and snap these into `docs/img/`. The panel auto-skins to your light/dark preference.
+
+| | |
+|---|---|
+| ![Users](./docs/img/users.png) | ![Registrations](./docs/img/registrations.png) |
+| ![DID map](./docs/img/did-map.png) | ![Call history](./docs/img/history.png) |
 
 ## What it does
 
