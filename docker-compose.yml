@@ -76,6 +76,8 @@ services:
       - "10000-10100:10000-10100/udp"
     depends_on:
       - heplify-server
+    volumes:
+      - ./.env:/etc/asterisk/.env:ro
 
   kamailio:
     build: ./kamailio
