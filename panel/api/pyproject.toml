@@ -6,20 +6,20 @@ dependencies = [
   "fastapi==0.136.*",
   "uvicorn[standard]==0.47.*",
   "pyjwt==2.12.*",
-  "bcrypt==4.2.*",
+  "bcrypt==5.0.*",
   "sqlalchemy==2.0.*",
   "pymysql==1.1.*",
-  "psycopg[binary]==3.2.*",
+  "psycopg[binary]==3.3.*",
   "docker==7.1.*",
-  "python-multipart==0.0.20",
+  "python-multipart==0.0.29",
   "pydantic-settings==2.14.*",
 ]
 
 [project.optional-dependencies]
 test = [
-  "pytest==8.3.*",
+  "pytest==9.0.*",
   "httpx==0.28.*",
-  "testcontainers[mariadb,postgres]==4.8.*",
+  "testcontainers[postgres]==4.14.*",
 ]
 
 [tool.setuptools.packages.find]
