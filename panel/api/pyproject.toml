@@ -8,7 +8,7 @@ dependencies = [
   "pyjwt==2.12.*",
   "bcrypt==5.0.*",
   "sqlalchemy==2.0.*",
-  "pymysql==1.1.*",
+  "pymysql==1.2.*",
   "psycopg[binary]==3.3.*",
   "docker==7.1.*",
   "python-multipart==0.0.29",
