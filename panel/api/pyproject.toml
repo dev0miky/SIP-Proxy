@@ -11,7 +11,7 @@ dependencies = [
   "pymysql==1.1.*",
   "psycopg[binary]==3.3.*",
   "docker==7.1.*",
-  "python-multipart==0.0.29",
+  "python-multipart==0.0.32",
   "pydantic-settings==2.14.*",
 ]
 
